@@ -1,0 +1,60 @@
+:root {
+  --sidebar-bg: #1E3A8A;
+  --sidebar-hover: #2747aa;
+  --primary: #2563EB;
+  --background: #F8FAFC;
+  --card-radius: 14px;
+}
+
+body {
+  background: var(--background);
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: var(--sidebar-bg);
+  color: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidebar .logo {
+  font-size: 22px;
+  font-weight: bold;
+  padding: 25px;
+}
+
+.sidebar a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  padding: 14px 25px;
+  transition: .2s;
+}
+
+.sidebar a:hover {
+  background: var(--sidebar-hover);
+}
+
+.content {
+  margin-left: 260px;
+}
+
+.topbar {
+  height: 70px;
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.dashboard-card {
+  border: none;
+  border-radius: var(--card-radius);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+}
+
+.dashboard-card h2 {
+  font-weight: bold;
+}
