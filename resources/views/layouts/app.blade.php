@@ -7,29 +7,40 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MIO Inventory & Maintenance Management System</title>
+    <title>MIS Inventory System</title>
 
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
 <body>
 
-@include('partials.sidebar')
+<div class="app-wrapper">
 
-<div class="content">
+    {{-- Sidebar --}}
+    @include('layouts.partials.sidebar')
 
-    @include('partials.navbar')
+    <div class="main-wrapper">
 
-    <div class="container-fluid p-4">
+        {{-- Navbar --}}
+        @include('layouts.partials.navbar')
 
-        @yield('content')
+        <main class="main-content">
+            
+            @yield('content')
+
+        </main>
+
+        {{-- Footer --}}
+        @include('layouts.partials.footer')
 
     </div>
 
-    @include('partials.footer')
-
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@include('layouts.partials.alerts')
+@include('layouts.partials.scripts')
 
 </body>
+
 </html>

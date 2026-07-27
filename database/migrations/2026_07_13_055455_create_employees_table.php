@@ -9,44 +9,38 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-        {
-            Schema::create('employees', function (Blueprint $table) {
+  public function up(): void
+{
+    Schema::create('employees', function (Blueprint $table) {
+        $table->id();
+        $table->uuid('uuid')->unique();
 
-                $table->id();
+        $table->string('employee_number', 30)->unique();
+        $table->string('first_name');
+        $table->string('middle_name')->nullable();
+        $table->string('last_name');
+        $table->string('extension_name', 10)->nullable();
 
-                $table->string('employee_number')->unique();
+        $table->enum('gender', ['Male', 'Female'])->nullable();
+        $table->date('birthdate')->nullable();
 
-                $table->string('first_name');
-                $table->string('middle_name')->nullable();
-                $table->string('last_name');
-                $table->string('extension_name')->nullable();
+        $table->string('position');
+        $table->foreignId('department_id')->constrained('departments')->restrictOnDelete();
 
-                $table->enum('gender',['Male','Female'])->nullable();
+        $table->string('office_name')->nullable();
+        $table->string('email')->nullable();
+        $table->string('contact_number')->nullable();
+        $table->string('photo')->nullable();
 
-                $table->date('birthdate')->nullable();
+        $table->boolean('is_active')->default(true);
 
-                $table->string('position');
+        $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+        $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
 
-                $table->foreignId('department_id')
-                    ->constrained()
-                    ->cascadeOnUpdate()
-                    ->restrictOnDelete();
-
-                $table->string('email')->nullable();
-
-                $table->string('contact_number')->nullable();
-
-                $table->string('photo')->nullable();
-
-                $table->boolean('is_active')->default(true);
-
-                $table->timestamps();
-
-                $table->softDeletes();
-
-            });
-        }
+        $table->timestamps();
+        $table->softDeletes();
+        });
+    }
     /**
      * Reverse the migrations.
      */

@@ -4,13 +4,13 @@
 
 <div class="row g-4">
 
-    <div class="col-lg-3">
+    <div class="col-lg-3 col-md-6">
 
         <div class="card dashboard-card">
 
             <div class="card-body">
 
-                <small>Total Equipment</small>
+                <h6>Total Equipment</h6>
 
                 <h2>0</h2>
 
@@ -20,13 +20,13 @@
 
     </div>
 
-    <div class="col-lg-3">
+    <div class="col-lg-3 col-md-6">
 
         <div class="card dashboard-card">
 
             <div class="card-body">
 
-                <small>Assigned Equipment</small>
+                <h6>Assigned Equipment</h6>
 
                 <h2>0</h2>
 
@@ -36,13 +36,13 @@
 
     </div>
 
-    <div class="col-lg-3">
+    <div class="col-lg-3 col-md-6">
 
         <div class="card dashboard-card">
 
             <div class="card-body">
 
-                <small>Maintenance</small>
+                <h6>Maintenance</h6>
 
                 <h2>0</h2>
 
@@ -52,13 +52,13 @@
 
     </div>
 
-    <div class="col-lg-3">
+    <div class="col-lg-3 col-md-6">
 
         <div class="card dashboard-card">
 
             <div class="card-body">
 
-                <small>Purchase Requests</small>
+                <h6>Purchase Requests</h6>
 
                 <h2>0</h2>
 

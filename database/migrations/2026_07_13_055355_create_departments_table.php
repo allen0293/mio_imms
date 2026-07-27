@@ -12,19 +12,35 @@ return new class extends Migration
   public function up(): void
         {
             Schema::create('departments', function (Blueprint $table) {
+
                 $table->id();
 
+                $table->uuid('uuid')->unique();
+
                 $table->string('department_code',20)->unique();
-                $table->string('department_name',100);
-                $table->string('office_name')->nullable();
+
+                $table->string('department_name');
+
+                $table->string('office_name');
 
                 $table->text('description')->nullable();
 
                 $table->boolean('is_active')->default(true);
 
+                $table->foreignId('created_by')
+                    ->nullable()
+                    ->constrained('users')
+                    ->nullOnDelete();
+
+                $table->foreignId('updated_by')
+                    ->nullable()
+                    ->constrained('users')
+                    ->nullOnDelete();
+
                 $table->timestamps();
 
                 $table->softDeletes();
+
             });
         }
 
