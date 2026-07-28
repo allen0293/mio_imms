@@ -9,6 +9,7 @@ use App\Http\Controllers\MasterData\EquipmentCategoryController;
 use App\Http\Controllers\MasterData\EquipmentBrandController;
 use App\Http\Controllers\MasterData\EquipmentModelController;
 use App\Http\Controllers\MasterData\SupplierController;
+use App\Http\Controllers\Procurement\PurchaseRequestController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -119,3 +120,27 @@ Route::name('master-data.')->group(function () {
     Route::post('suppliers/{id}/restore', [SupplierController::class, 'restore'])
         ->name('suppliers.restore');
 });
+
+
+/*
+    Purchase Request Routes
+*/
+Route::prefix('procurement')
+    ->name('procurement.')
+    ->middleware(['auth'])
+    ->group(function () {
+
+        Route::resource('purchase-requests', PurchaseRequestController::class);
+
+        Route::get(
+            'purchase-requests-trash',
+            [PurchaseRequestController::class, 'trash']
+        )->name('purchase-requests.trash');
+
+        Route::patch(
+            'purchase-requests/{purchaseRequest}/restore',
+            [PurchaseRequestController::class, 'restore']
+        )->withTrashed()
+         ->name('purchase-requests.restore');
+
+    });

@@ -67,6 +67,33 @@
 
             </a>
         </li>
+
+        <li class="nav-item mt-3">
+            <small class="text-uppercase text-secondary">Procurement</small>
+        </li>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="bi bi-pc-display me-2"></i>
+                Purchase Requests
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="bi bi-tools me-2"></i>
+               Delivery Receipts
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="bi bi-file-earmark-text me-2"></i>
+                 Receiving
+            </a>
+        </li>
+
+
         <li class="nav-item mt-3">
             <small class="text-uppercase text-secondary">Inventory</small>
         </li>
