@@ -1,0 +1,46 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import "./dashboard.css";
+@import './sidebar.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: #f4f6f9;
+  overflow-x: hidden;
+}
+
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 260px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 25px;
+}
+
+:root {
+  --primary: #0d6efd;
+  --secondary: #6c757d;
+  --success: #198754;
+  --danger: #dc3545;
+  --warning: #ffc107;
+  --info: #0dcaf0;
+  --dark: #212529;
+  --sidebar: #1f2937;
+  --sidebar-hover: #374151;
+  --sidebar-active: #2563eb;
+  --body: #f5f6fa;
+}
