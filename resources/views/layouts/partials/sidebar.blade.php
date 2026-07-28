@@ -56,6 +56,17 @@
 
             </a>
         </li>
+
+        <li class="nav-item">
+            <a href="{{ route('master-data.suppliers.index') }}"
+            class="nav-link {{ request()->routeIs('master-data.suppliers.*') ? 'active' : '' }}">
+
+                <i class="bi bi-truck"></i>
+
+                Suppliers
+
+            </a>
+        </li>
         <li class="nav-item mt-3">
             <small class="text-uppercase text-secondary">Inventory</small>
         </li>

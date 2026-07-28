@@ -8,6 +8,7 @@ use App\Http\Controllers\MasterData\EmployeeController;
 use App\Http\Controllers\MasterData\EquipmentCategoryController;
 use App\Http\Controllers\MasterData\EquipmentBrandController;
 use App\Http\Controllers\MasterData\EquipmentModelController;
+use App\Http\Controllers\MasterData\SupplierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,21 +25,14 @@ require __DIR__.'/auth.php';
     Department Routes
 */
 Route::middleware(['auth'])->group(function () {
-
     Route::prefix('master-data')
         ->name('master-data.')
         ->group(function () {
-
             Route::resource('departments', DepartmentController::class);
-
         });
-
 });
 
-Route::post(
-    'master-data/departments/{id}/restore',
-    [DepartmentController::class, 'restore']
-)->name('master-data.departments.restore');
+Route::post('master-data/departments/{id}/restore',[DepartmentController::class, 'restore'])->name('master-data.departments.restore');
 
 Route::get(
     'master-data/departments-trash',
@@ -68,7 +62,9 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     Equipment Category Routes
 */
 Route::name('master-data.')->group(function () {
-    Route::resource('equipment-categories', EquipmentCategoryController::class);
+
+      Route::resource('equipment-categories', EquipmentCategoryController::class)
+    ->parameters(['equipment-categories' => 'equipmentCategory']);
 
     Route::get('equipment-categories-trash', [EquipmentCategoryController::class, 'trash'])
         ->name('equipment-categories.trash');
@@ -107,4 +103,19 @@ Route::name('master-data.')->group(function () {
         'equipment-models/{id}/restore',
         [EquipmentModelController::class, 'restore']
     )->name('equipment-models.restore');
+});
+
+/*
+    Supplier Routes
+*/
+
+
+Route::name('master-data.')->group(function () {
+    Route::resource('suppliers', SupplierController::class);
+
+    Route::get('suppliers-trash', [SupplierController::class, 'trash'])
+        ->name('suppliers.trash');
+
+    Route::post('suppliers/{id}/restore', [SupplierController::class, 'restore'])
+        ->name('suppliers.restore');
 });
