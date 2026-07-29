@@ -13,59 +13,55 @@ class PurchaseRequest extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-
         'uuid',
-
         'pr_number',
-
+        'request_type',
         'request_date',
-
         'needed_date',
-
         'department_id',
-
         'requested_by',
-
         'purpose',
-
         'justification',
-
-        'status',
-
         'remarks',
-
+        'estimated_amount',
+        'status',
         'created_by',
-
         'updated_by',
+    ];
 
+    protected $casts = [
+        'request_date' => 'date',
+        'needed_date' => 'date',
+        'estimated_amount' => 'decimal:2',
     ];
 
     protected static function booted()
     {
-        static::creating(function ($pr) {
+        static::creating(function ($model) {
 
-            $pr->uuid = (string) Str::uuid();
-
-            if (Auth::check()) {
-
-                $pr->created_by = Auth::id();
-
-                $pr->updated_by = Auth::id();
-
+            if (empty($model->uuid)) {
+                $model->uuid = (string) Str::uuid();
             }
 
+            if (Auth::check()) {
+                $model->created_by = Auth::id();
+                $model->updated_by = Auth::id();
+            }
         });
 
-        static::updating(function ($pr) {
+        static::updating(function ($model) {
 
             if (Auth::check()) {
-
-                $pr->updated_by = Auth::id();
-
+                $model->updated_by = Auth::id();
             }
-
         });
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function department()
     {
@@ -74,7 +70,17 @@ class PurchaseRequest extends Model
 
     public function requester()
     {
-        return $this->belongsTo(Employee::class,'requested_by');
+        return $this->belongsTo(Employee::class, 'requested_by');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     public function items()
@@ -96,4 +102,9 @@ class PurchaseRequest extends Model
     {
         return $this->hasMany(PurchaseRequestAttachment::class);
     }
+
+    public function isEditable(): bool
+        {
+            return $this->status === 'Draft';
+        }
 }

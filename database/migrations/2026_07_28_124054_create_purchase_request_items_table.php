@@ -12,6 +12,9 @@ return new class extends Migration
 
             $table->id();
 
+            // NEW
+            $table->uuid('uuid')->unique();
+
             $table->foreignId('purchase_request_id')
                 ->constrained()
                 ->cascadeOnDelete();
@@ -20,13 +23,22 @@ return new class extends Migration
                 ->constrained()
                 ->restrictOnDelete();
 
+            // NEW
+            $table->string('description')->nullable();
+
             $table->integer('quantity');
 
-            $table->decimal('estimated_unit_cost',15,2)
+            $table->string('unit_of_measure', 50)
+                ->default('Unit');
+
+            $table->decimal('estimated_unit_cost', 15, 2)
                 ->default(0);
 
-            $table->decimal('estimated_total_cost',15,2)
+            $table->decimal('estimated_total_cost', 15, 2)
                 ->default(0);
+
+            $table->integer('sort_order')
+                ->default(1);
 
             $table->text('remarks')->nullable();
 

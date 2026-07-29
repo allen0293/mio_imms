@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class PurchaseRequestHistory extends Model
 {
     use HasFactory;
+    protected $table = 'purchase_request_history';
     protected $fillable = [
-
+        
         'purchase_request_id',
 
         'action',
@@ -24,7 +25,7 @@ class PurchaseRequestHistory extends Model
         return $this->belongsTo(PurchaseRequest::class);
     }
 
-  public function performer()
+    public function performer()
     {
         return $this->belongsTo(User::class, 'performed_by');
     }

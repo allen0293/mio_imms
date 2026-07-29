@@ -28,7 +28,7 @@ class PurchaseRequestApproval extends Model
         return $this->belongsTo(PurchaseRequest::class);
     }
 
-   public function approver()
+    public function approver()
     {
         return $this->belongsTo(User::class, 'approver_id');
     }

@@ -19,8 +19,9 @@ return new class extends Migration
             $table->integer('approval_level');
 
             $table->foreignId('approver_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             $table->enum('status',[
                 'Pending',

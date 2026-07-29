@@ -8,9 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('purchase_request_attachments', function (Blueprint $table) {
+       Schema::create('purchase_request_attachments', function (Blueprint $table) {
 
             $table->id();
+
+            $table->uuid('uuid')->unique();
 
             $table->foreignId('purchase_request_id')
                 ->constrained()
@@ -20,9 +22,12 @@ return new class extends Migration
 
             $table->string('file_path');
 
+            $table->string('file_type', 50);
+
             $table->foreignId('uploaded_by')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             $table->timestamps();
 

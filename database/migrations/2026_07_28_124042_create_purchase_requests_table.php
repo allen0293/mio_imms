@@ -10,55 +10,66 @@ return new class extends Migration
     {
         Schema::create('purchase_requests', function (Blueprint $table) {
 
-            $table->id();
+    $table->id();
 
-            $table->uuid('uuid')->unique();
+    $table->uuid('uuid')->unique();
 
-            $table->string('pr_number')->unique();
+    $table->string('pr_number')->unique();
 
-            $table->date('request_date');
+    // NEW
+    $table->enum('request_type', [
+        'Asset',
+        'Consumable',
+        'Service'
+    ])->default('Asset');
 
-            $table->date('needed_date')->nullable();
+    $table->date('request_date');
 
-            $table->foreignId('department_id')
-                ->constrained()
-                ->restrictOnDelete();
+    $table->date('needed_date')->nullable();
 
-            $table->foreignId('requested_by')
-                ->constrained('employees')
-                ->restrictOnDelete();
+    $table->foreignId('department_id')
+        ->constrained()
+        ->restrictOnDelete();
 
-            $table->text('purpose');
+    $table->foreignId('requested_by')
+        ->constrained('employees')
+        ->restrictOnDelete();
 
-            $table->text('justification')->nullable();
+    $table->text('purpose');
 
-            $table->enum('status',[
-                'Draft',
-                'Submitted',
-                'Partially Approved',
-                'Approved',
-                'Rejected',
-                'Cancelled',
-                'Completed'
-            ])->default('Draft');
+    $table->text('justification')->nullable();
 
-            $table->text('remarks')->nullable();
+    $table->text('remarks')->nullable();
 
-            $table->foreignId('created_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
+    // NEW
+    $table->decimal('estimated_amount', 15, 2)
+        ->default(0);
 
-            $table->foreignId('updated_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
+        $table->enum('status', [
+            'Draft',
+            'Submitted',
+            'Partially Approved',
+            'Approved',
+            'Rejected',
+            'Cancelled',
+            'Completed'
+        ])->default('Draft');
 
-            $table->timestamps();
+        $table->foreignId('created_by')
+            ->nullable()
+            ->constrained('users')
+            ->nullOnDelete();
 
-            $table->softDeletes();
+        $table->foreignId('updated_by')
+            ->nullable()
+            ->constrained('users')
+            ->nullOnDelete();
 
-        });
+        $table->timestamps();
+
+        $table->softDeletes();
+
+    });
     }
 
     public function down(): void

@@ -18,13 +18,13 @@ class PurchaseRequestAttachment extends Model
 
     ];
 
-    public function purchaseRequest()
-    {
-        return $this->belongsTo(PurchaseRequest::class);
-    }
+ public function purchaseRequest()
+{
+    return $this->belongsTo(PurchaseRequest::class);
+}
 
-    public function uploader()
-    {
-        return $this->belongsTo(User::class, 'uploaded_by');
-    }
+public function uploader()
+{
+    return $this->belongsTo(User::class, 'uploaded_by');
+}
 }
