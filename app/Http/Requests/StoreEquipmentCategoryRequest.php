@@ -17,7 +17,7 @@ class StoreEquipmentCategoryRequest extends FormRequest
             'category_code' => 'required|string|max:50|unique:equipment_categories,category_code',
             'category_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
         ];
     }
 }

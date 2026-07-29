@@ -52,7 +52,7 @@ class EquipmentModelController extends Controller
     public function store(StoreEquipmentModelRequest $request)
     {
         EquipmentModel::create($request->validated());
-
+        $data['is_active'] = $data['is_active'] ?? 1;
         return redirect()
             ->route('master-data.equipment-models.index')
             ->with('success', 'Equipment Model created successfully.');

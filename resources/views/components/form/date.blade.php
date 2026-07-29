@@ -1,36 +1,47 @@
 @props([
-    'label',
+    'label' => '',
     'name',
-    'type' => 'text',
     'value' => '',
     'required' => false,
-    'placeholder' => '',
+    'help' => null,
 ])
 
 <div class="mb-3">
-    <label for="{{ $name }}" class="form-label">
-        {{ $label }}
 
-        @if($required)
-            <span class="text-danger">*</span>
-        @endif
-    </label>
+    @if($label)
+        <label for="{{ $name }}" class="form-label">
+
+            {{ $label }}
+
+            @if($required)
+                <span class="text-danger">*</span>
+            @endif
+
+        </label>
+    @endif
 
     <input
+        type="date"
         id="{{ $name }}"
-        type="{{ $type }}"
         name="{{ $name }}"
         value="{{ old($name, $value) }}"
-        placeholder="{{ $placeholder }}"
         @required($required)
+
         {{ $attributes->merge([
             'class' => 'form-control' . ($errors->has($name) ? ' is-invalid' : '')
         ]) }}
     >
 
+    @if($help)
+        <small class="text-muted">
+            {{ $help }}
+        </small>
+    @endif
+
     @error($name)
-        <div class="invalid-feedback">
+        <div class="invalid-feedback d-block">
             {{ $message }}
         </div>
     @enderror
+
 </div>

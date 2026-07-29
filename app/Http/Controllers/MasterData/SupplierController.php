@@ -40,7 +40,7 @@ class SupplierController extends Controller
     public function store(StoreSupplierRequest $request)
     {
         Supplier::create($request->validated());
-
+        $data['is_active'] = $data['is_active'] ?? 1;
         return redirect()
             ->route('master-data.suppliers.index')
             ->with('success', 'Supplier created successfully.');

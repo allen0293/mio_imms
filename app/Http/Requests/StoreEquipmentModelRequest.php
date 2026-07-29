@@ -27,7 +27,7 @@ class StoreEquipmentModelRequest extends FormRequest
 
             'description' => 'nullable|string',
 
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
 
         ];
     }

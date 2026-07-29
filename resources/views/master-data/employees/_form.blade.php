@@ -3,97 +3,106 @@
 <div class="row g-3">
 
     <div class="col-md-4">
-        <label class="form-label">Employee Number <span class="text-danger">*</span></label>
-        <input type="text"
-               name="employee_number"
-               value="{{ old('employee_number', $employee->employee_number ?? '') }}"
-               class="form-control @error('employee_number') is-invalid @enderror">
-        @error('employee_number')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Employee Number"
+            name="employee_number"
+            :value="$employee->employee_number ?? ''"
+            placeholder="Enter employee number"
+            required
+        />
+
     </div>
 
     <div class="col-md-4">
-        <label class="form-label">First Name <span class="text-danger">*</span></label>
-        <input type="text"
-               name="first_name"
-               value="{{ old('first_name', $employee->first_name ?? '') }}"
-               class="form-control @error('first_name') is-invalid @enderror">
-        @error('first_name')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="First Name"
+            name="first_name"
+            :value="$employee->first_name ?? ''"
+            placeholder="Enter first name"
+            required
+        />
+
     </div>
 
     <div class="col-md-4">
-        <label class="form-label">Middle Name</label>
-        <input type="text"
-               name="middle_name"
-               value="{{ old('middle_name', $employee->middle_name ?? '') }}"
-               class="form-control @error('middle_name') is-invalid @enderror">
-        @error('middle_name')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Middle Name"
+            name="middle_name"
+            :value="$employee->middle_name ?? ''"
+            placeholder="Enter middle name"
+        />
+
     </div>
 
     <div class="col-md-4">
-        <label class="form-label">Last Name <span class="text-danger">*</span></label>
-        <input type="text"
-               name="last_name"
-               value="{{ old('last_name', $employee->last_name ?? '') }}"
-               class="form-control @error('last_name') is-invalid @enderror">
-        @error('last_name')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Last Name"
+            name="last_name"
+            :value="$employee->last_name ?? ''"
+            placeholder="Enter last name"
+            required
+        />
+
     </div>
 
     <div class="col-md-2">
-        <label class="form-label">Extension</label>
-        <input type="text"
-               name="extension_name"
-               value="{{ old('extension_name', $employee->extension_name ?? '') }}"
-               class="form-control @error('extension_name') is-invalid @enderror">
-        @error('extension_name')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Extension"
+            name="extension_name"
+            :value="$employee->extension_name ?? ''"
+            placeholder="e.g. Jr., III"
+        />
+
     </div>
 
     <div class="col-md-2">
-        <label class="form-label">Gender</label>
-        <select name="gender" class="form-select @error('gender') is-invalid @enderror">
+
+        <x-form.select
+            label="Gender"
+            name="gender"
+        >
             <option value="">Select</option>
             <option value="Male" @selected(old('gender', $employee->gender ?? '') == 'Male')>Male</option>
             <option value="Female" @selected(old('gender', $employee->gender ?? '') == 'Female')>Female</option>
-        </select>
-        @error('gender')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+        </x-form.select>
+
     </div>
 
     <div class="col-md-4">
-        <label class="form-label">Birthdate</label>
-        <input type="date"
-               name="birthdate"
-               value="{{ old('birthdate', $employee->birthdate ?? '') }}"
-               class="form-control @error('birthdate') is-invalid @enderror">
-        @error('birthdate')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Birthdate"
+            name="birthdate"
+            type="date"
+            :value="$employee->birthdate ?? ''"
+        />
+
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Position <span class="text-danger">*</span></label>
-        <input type="text"
-               name="position"
-               value="{{ old('position', $employee->position ?? '') }}"
-               class="form-control @error('position') is-invalid @enderror">
-        @error('position')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Position"
+            name="position"
+            :value="$employee->position ?? ''"
+            placeholder="Enter position"
+            required
+        />
+
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Department <span class="text-danger">*</span></label>
-        <select name="department_id" class="form-select @error('department_id') is-invalid @enderror">
+
+        <x-form.select
+            label="Department"
+            name="department_id"
+            required
+        >
             <option value="">Select Department</option>
             @foreach($departments as $department)
                 <option value="{{ $department->id }}"
@@ -101,67 +110,79 @@
                     {{ $department->department_name }}
                 </option>
             @endforeach
-        </select>
-        @error('department_id')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+        </x-form.select>
+
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Office Name</label>
-        <input type="text"
-               name="office_name"
-               value="{{ old('office_name', $employee->office_name ?? '') }}"
-               class="form-control @error('office_name') is-invalid @enderror">
-        @error('office_name')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Office Name"
+            name="office_name"
+            :value="$employee->office_name ?? ''"
+            placeholder="Enter office name"
+        />
+
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Email</label>
-        <input type="email"
-               name="email"
-               value="{{ old('email', $employee->email ?? '') }}"
-               class="form-control @error('email') is-invalid @enderror">
-        @error('email')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Email"
+            name="email"
+            type="email"
+            :value="$employee->email ?? ''"
+            placeholder="Enter email"
+        />
+
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Contact Number</label>
-        <input type="text"
-               name="contact_number"
-               value="{{ old('contact_number', $employee->contact_number ?? '') }}"
-               class="form-control @error('contact_number') is-invalid @enderror">
-        @error('contact_number')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <x-form.input
+            label="Contact Number"
+            name="contact_number"
+            :value="$employee->contact_number ?? ''"
+            placeholder="Enter contact number"
+        />
+
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Photo</label>
-        <input type="file"
-               name="photo"
-               class="form-control @error('photo') is-invalid @enderror">
-        @error('photo')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
 
-    <div class="col-md-4">
-        <label class="form-label">Status <span class="text-danger">*</span></label>
-        <select name="is_active" class="form-select @error('is_active') is-invalid @enderror">
-            <option value="1" @selected(old('is_active', $employee->is_active ?? 1) == 1)>Active</option>
-            <option value="0" @selected(old('is_active', $employee->is_active ?? 1) == 0)>Inactive</option>
-        </select>
-        @error('is_active')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+        <x-form.input
+            label="Photo"
+            name="photo"
+            type="file"
+        />
+
     </div>
 
 </div>
+
+@if(isset($employee) && $employee->exists)
+
+<div class="row mt-3">
+    <div class="col-md-4">
+
+        <x-form.select
+            label="Status"
+            name="is_active"
+            required
+        >
+            <option value="1" @selected(old('is_active', $employee->is_active) == 1)>
+                Active
+            </option>
+
+            <option value="0" @selected(old('is_active', $employee->is_active) == 0)>
+                Inactive
+            </option>
+        </x-form.select>
+
+    </div>
+</div>
+
+@endif
 
 <div class="d-flex justify-content-end gap-2 mt-4">
 
@@ -171,6 +192,7 @@
     </a>
 
     <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle"></i>
         Save Employee
     </button>
 

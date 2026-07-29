@@ -21,7 +21,7 @@ class StoreEquipmentBrandRequest extends FormRequest
 
             'description' => 'nullable',
 
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
 
         ];
     }

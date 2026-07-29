@@ -36,7 +36,7 @@ class EquipmentCategoryController extends Controller
     public function store(StoreEquipmentCategoryRequest $request)
     {
         EquipmentCategory::create($request->validated());
-
+        $data['is_active'] = $data['is_active'] ?? 1;
         return redirect()
             ->route('master-data.equipment-categories.index')
             ->with('success', 'Equipment category created successfully.');

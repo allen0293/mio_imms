@@ -23,7 +23,7 @@
 
         <form action="{{ route('master-data.equipment-categories.store') }}"
               method="POST">
-
+            @csrf
             @include('master-data.equipment-categories._form')
 
         </form>

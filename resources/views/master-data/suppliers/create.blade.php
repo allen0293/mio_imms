@@ -23,7 +23,7 @@ Back
 
 <form action="{{ route('master-data.suppliers.store') }}"
 method="POST">
-
+@csrf
 @include('master-data.suppliers._form')
 
 </form>

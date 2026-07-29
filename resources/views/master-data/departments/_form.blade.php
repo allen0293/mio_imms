@@ -1,125 +1,104 @@
-@csrf
+<div class="row">
+
+    <div class="col-md-4">
+
+        <x-form.input
+            label="Department Code"
+            name="department_code"
+            :value="$department->department_code ?? ''"
+            placeholder="Enter department code"
+            required
+        />
+
+    </div>
+
+    <div class="col-md-8">
+
+      <x-form.input
+            label="Department Name"
+            name="department_name"
+            :value="$department->department_name ?? ''"
+            placeholder="Enter department name"
+            required
+        />
+
+    </div>
+
+</div>
 
 <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-md-12">
 
-        <label class="form-label">
-            Department Code <span class="text-danger">*</span>
-        </label>
-
-        <input
-            type="text"
-            name="department_code"
-            class="form-control @error('department_code') is-invalid @enderror"
-            value="{{ old('department_code', $department->department_code ?? '') }}"
-        >
-
-        @error('department_code')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-
-    </div>
-
-    <div class="col-md-6 mb-3">
-
-        <label class="form-label">
-            Department Name <span class="text-danger">*</span>
-        </label>
-
-        <input
-            type="text"
-            name="department_name"
-            class="form-control @error('department_name') is-invalid @enderror"
-            value="{{ old('department_name', $department->department_name ?? '') }}"
-        >
-
-        @error('department_name')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
+      <x-form.input
+            label="Office Name"
+            name="office_name"
+            :value="$department->office_name ?? ''"
+            placeholder="Enter office name"
+            required
+        />
 
     </div>
 
 </div>
 
-<div class="mb-3">
+<div class="row">
 
-    <label class="form-label">
-        Office Name <span class="text-danger">*</span>
-    </label>
+    <div class="col-md-12">
 
-    <input
-        type="text"
-        name="office_name"
-        class="form-control @error('office_name') is-invalid @enderror"
-        value="{{ old('office_name', $department->office_name ?? '') }}"
+        <x-form.textarea
+            label="Description"
+            name="description"
+            :value="$department->description ?? ''"
+            rows="3"
+            placeholder="Enter description (optional)"
+        />
+
+    </div>
+
+</div>
+
+@if(isset($department) && $department->exists)
+
+<div class="row">
+    <div class="col-md-6">
+
+        <x-form.select
+            label="Status"
+            name="is_active"
+            required
+        >
+            <option value="1" @selected(old('is_active', $department->is_active) == 1)>
+                Active
+            </option>
+
+            <option value="0" @selected(old('is_active', $department->is_active) == 0)>
+                Inactive
+            </option>
+        </x-form.select>
+
+    </div>
+</div>
+
+@endif
+
+<div class="d-flex justify-content-end mt-4">
+
+    <a
+        href="{{ route('master-data.departments.index') }}"
+        class="btn btn-secondary me-2"
     >
-
-    @error('office_name')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-    @enderror
-
-</div>
-
-<div class="mb-3">
-
-    <label class="form-label">
-        Description
-    </label>
-
-    <textarea
-        name="description"
-        rows="4"
-        class="form-control"
-    >{{ old('description', $department->description ?? '') }}</textarea>
-
-</div>
-
-<div class="mb-3">
-
-    <label class="form-label">
-        Status
-    </label>
-
-    <select
-        name="is_active"
-        class="form-select"
-    >
-
-        <option value="1"
-            {{ old('is_active', $department->is_active ?? 1) == 1 ? 'selected' : '' }}>
-            Active
-        </option>
-
-        <option value="0"
-            {{ old('is_active', $department->is_active ?? 1) == 0 ? 'selected' : '' }}>
-            Inactive
-        </option>
-
-    </select>
-
-</div>
-
-<div class="d-flex justify-content-end gap-2">
-
-    <a href="{{ route('master-data.departments.index') }}"
-       class="btn btn-secondary">
-
-        Cancel
-
+        <i class="bi bi-arrow-left"></i>
+        Back
     </a>
 
     <button
         type="submit"
-        class="btn btn-primary">
+        class="btn btn-primary"
+    >
+        <i class="bi bi-check-circle"></i>
 
-        Save Department
+        {{ isset($department) && $department->exists ? 'Update Department' : 'Save Department' }}
 
     </button>
 

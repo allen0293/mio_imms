@@ -5,8 +5,8 @@
 <div class="container-fluid">
 
     <x-page-header
-        title="Equipment Model Details"
-        subtitle="View equipment model information">
+        title="Supplier Details"
+        subtitle="View supplier information">
 
         <a href="{{ route('master-data.suppliers.index') }}"
            class="btn btn-secondary">
@@ -36,7 +36,7 @@
                 </x-info-row>
 
                 <x-info-row label="Contact Person">
-                    {{ $supplier->contact_person ?: '-' }}      
+                    {{ $supplier->contact_person ?: '-' }}
                 </x-info-row>
 
                 <x-info-row label="Contact Number">
@@ -44,7 +44,7 @@
                 </x-info-row>
 
                 <x-info-row label="Email Address">
-                    {{ $supplier->email_address ?: '-' }}
+                    {{ $supplier->email ?: '-' }}
                 </x-info-row>
 
                 <x-info-row label="TIN Number">
@@ -58,8 +58,10 @@
                 <x-info-row label="Remarks">
                     {{ $supplier->remarks ?: '-' }}
                 </x-info-row>
+
                 <x-info-row label="Status">
-                    <x-status-badge :status="$supplier->is_active" />   
+                    <x-status-badge :status="$supplier->is_active" />
+                </x-info-row>
 
             </x-card>
 

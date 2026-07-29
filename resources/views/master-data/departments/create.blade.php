@@ -1,34 +1,27 @@
 @extends('layouts.app')
 
+@section('title', 'Create Department')
+
 @section('content')
 
-<div class="container-fluid">
+<x-page-header
+    title="Create Department"
+    subtitle="Add a new department."
+/>
 
-    <x-page-header
-        title="Create Department"
-        subtitle="Add a new department">
+<x-card>
 
-        <a href="{{ route('master-data.departments.index') }}"
-           class="btn btn-secondary">
+    <form
+        action="{{ route('master-data.departments.store') }}"
+        method="POST"
+    >
 
-            Back
+        @csrf
 
-        </a>
+        @include('master-data.departments._form')
 
-    </x-page-header>
+    </form>
 
-    <x-card>
-
-        <form
-            action="{{ route('master-data.departments.store') }}"
-            method="POST">
-
-            @include('master-data.departments._form')
-
-        </form>
-
-    </x-card>
-
-</div>
+</x-card>
 
 @endsection

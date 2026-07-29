@@ -39,7 +39,7 @@ class EquipmentBrandController extends Controller
     public function store(StoreEquipmentBrandRequest $request)
     {
         EquipmentBrand::create($request->validated());
-
+        $data['is_active'] = $data['is_active'] ?? 1;
         return redirect()
             ->route('master-data.equipment-brands.index')
             ->with('success', 'Equipment Brand created successfully.');

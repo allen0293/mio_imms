@@ -2,131 +2,132 @@
 
 <div class="row g-3">
 
-<div class="col-md-4">
+    <div class="col-md-4">
 
-<label class="form-label">Supplier Code</label>
+        <x-form.input
+            label="Supplier Code"
+            name="supplier_code"
+            :value="$supplier->supplier_code ?? ''"
+            placeholder="Enter supplier code"
+        />
 
-<input type="text"
-name="supplier_code"
-class="form-control"
-value="{{ old('supplier_code',$supplier->supplier_code ?? '') }}">
+    </div>
 
-</div>
+    <div class="col-md-8">
 
-<div class="col-md-8">
+        <x-form.input
+            label="Supplier Name"
+            name="supplier_name"
+            :value="$supplier->supplier_name ?? ''"
+            placeholder="Enter supplier name"
+        />
 
-<label class="form-label">Supplier Name</label>
+    </div>
 
-<input type="text"
-name="supplier_name"
-class="form-control"
-value="{{ old('supplier_name',$supplier->supplier_name ?? '') }}">
+    <div class="col-md-6">
 
-</div>
+        <x-form.input
+            label="Contact Person"
+            name="contact_person"
+            :value="$supplier->contact_person ?? ''"
+            placeholder="Enter contact person"
+        />
 
-<div class="col-md-6">
+    </div>
 
-<label class="form-label">Contact Person</label>
+    <div class="col-md-6">
 
-<input type="text"
-name="contact_person"
-class="form-control"
-value="{{ old('contact_person',$supplier->contact_person ?? '') }}">
+        <x-form.input
+            label="Contact Number"
+            name="contact_number"
+            :value="$supplier->contact_number ?? ''"
+            placeholder="Enter contact number"
+        />
 
-</div>
+    </div>
 
-<div class="col-md-6">
+    <div class="col-md-6">
 
-<label class="form-label">Contact Number</label>
+        <x-form.input
+            label="Email"
+            name="email"
+            type="email"
+            :value="$supplier->email ?? ''"
+            placeholder="Enter email"
+        />
 
-<input type="text"
-name="contact_number"
-class="form-control"
-value="{{ old('contact_number',$supplier->contact_number ?? '') }}">
+    </div>
 
-</div>
+    <div class="col-md-6">
 
-<div class="col-md-6">
+        <x-form.input
+            label="TIN Number"
+            name="tin_number"
+            :value="$supplier->tin_number ?? ''"
+            placeholder="Enter TIN number"
+        />
 
-<label class="form-label">Email</label>
+    </div>
 
-<input type="email"
-name="email"
-class="form-control"
-value="{{ old('email',$supplier->email ?? '') }}">
+    <div class="col-12">
 
-</div>
+        <x-form.textarea
+            label="Address"
+            name="address"
+            :value="$supplier->address ?? ''"
+            rows="3"
+            placeholder="Enter address"
+        />
 
-<div class="col-md-6">
+    </div>
 
-<label class="form-label">TIN Number</label>
+    <div class="col-12">
 
-<input type="text"
-name="tin_number"
-class="form-control"
-value="{{ old('tin_number',$supplier->tin_number ?? '') }}">
+        <x-form.textarea
+            label="Remarks"
+            name="remarks"
+            :value="$supplier->remarks ?? ''"
+            rows="3"
+            placeholder="Enter remarks (optional)"
+        />
 
-</div>
-
-<div class="col-12">
-
-<label class="form-label">Address</label>
-
-<textarea
-name="address"
-rows="3"
-class="form-control">{{ old('address',$supplier->address ?? '') }}</textarea>
-
-</div>
-
-<div class="col-12">
-
-<label class="form-label">Remarks</label>
-
-<textarea
-name="remarks"
-rows="3"
-class="form-control">{{ old('remarks',$supplier->remarks ?? '') }}</textarea>
-
-</div>
-
-<div class="col-md-4">
-
-<label>Status</label>
-
-<select
-name="is_active"
-class="form-select">
-
-<option value="1"
-@selected(old('is_active',$supplier->is_active ?? 1)==1)>
-Active
-</option>
-
-<option value="0"
-@selected(old('is_active',$supplier->is_active ?? 1)==0)>
-Inactive
-</option>
-
-</select>
+    </div>
 
 </div>
 
+@if(isset($supplier) && $supplier->exists)
+
+<div class="row mt-3">
+    <div class="col-md-4">
+
+        <x-form.select
+            label="Status"
+            name="is_active"
+        >
+            <option value="1" @selected(old('is_active', $supplier->is_active) == 1)>
+                Active
+            </option>
+
+            <option value="0" @selected(old('is_active', $supplier->is_active) == 0)>
+                Inactive
+            </option>
+        </x-form.select>
+
+    </div>
 </div>
+
+@endif
 
 <div class="mt-4 d-flex justify-content-end gap-2">
 
-<a href="{{ route('master-data.suppliers.index') }}"
-class="btn btn-secondary">
+    <a href="{{ route('master-data.suppliers.index') }}"
+       class="btn btn-secondary">
+        Cancel
+    </a>
 
-Cancel
-
-</a>
-
-<button class="btn btn-primary">
-
-Save Supplier
-
-</button>
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle"></i>
+        Save Supplier
+    </button>
 
 </div>

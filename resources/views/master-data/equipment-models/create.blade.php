@@ -24,7 +24,7 @@ Back
 <form
 action="{{ route('master-data.equipment-models.store') }}"
 method="POST">
-
+@csrf
 @include('master-data.equipment-models._form')
 
 </form>

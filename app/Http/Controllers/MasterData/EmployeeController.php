@@ -42,7 +42,8 @@ class EmployeeController extends Controller
     public function store(StoreEmployeeRequest $request)
     {
         $data = $request->validated();
-
+        $data['is_active'] = $data['is_active'] ?? 1;
+        
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('employees', 'public');
         }

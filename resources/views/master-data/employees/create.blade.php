@@ -24,7 +24,7 @@
         <form action="{{ route('master-data.employees.store') }}"
               method="POST"
               enctype="multipart/form-data">
-
+            @csrf
             @include('master-data.employees._form')
 
         </form>

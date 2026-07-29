@@ -31,7 +31,7 @@ class StoreSupplierRequest extends FormRequest
 
             'remarks' => 'nullable|string',
 
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
 
         ];
     }
