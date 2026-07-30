@@ -1,43 +1,110 @@
-let rowIndex = 0;
+console.log("Transaction Table Loaded");
+class TransactionTable {
 
-document.addEventListener("DOMContentLoaded", function () {
+    constructor() {
+        this.rowIndex = 0;
+        this.tableBody = document.getElementById('itemsTableBody');
+        this.addButton = document.getElementById('btnAddItem');
+        this.grandTotal = document.getElementById('grandTotal');
 
-    const addButton = document.getElementById("btnAddItem");
+        if (!this.tableBody || !this.addButton) {
+            return;
+        }
 
-    if (!addButton) return;
+        this.registerEvents();
+    }
 
-    addButton.addEventListener("click", addRow);
+    registerEvents() {
 
-});
+        this.addButton.addEventListener('click', () => {
+            this.addRow();
+        });
 
-function addRow() {
+        this.tableBody.addEventListener('input', (e) => {
 
-    const tbody = document.getElementById("itemsTableBody");
+            if (
+                e.target.classList.contains('quantity') ||
+                e.target.classList.contains('unit-cost')
+            ) {
+                this.calculateRow(e.target.closest('tr'));
+            }
 
-    tbody.insertAdjacentHTML(
-        "beforeend",
-        buildRow(rowIndex)
-    );
+        });
 
-    rowIndex++;
+        this.tableBody.addEventListener('click', (e) => {
 
-}
+            if (e.target.closest('.btn-remove')) {
 
-function buildRow(index) {
+                e.target.closest('tr').remove();
 
-    let options = '<option value="">Select Model</option>';
+                this.calculateGrandTotal();
 
-    window.equipmentModels.forEach(model => {
+            }
 
-        options += `
-            <option value="${model.id}">
-                ${model.model_name}
-            </option>
-        `;
+        });
 
-    });
+        this.tableBody.addEventListener('change', (e) => {
 
-    return `
+            if (e.target.matches('select[name*="[equipment_model_id]"]')) {
+
+                this.populateModelDetails(e.target);
+
+            }
+
+        });
+
+    }
+
+        populateModelDetails(select) {
+
+        const option = select.selectedOptions[0];
+
+        const row = select.closest('tr');
+
+        row.querySelector('input[name*="[unit_of_measure]"]').value =
+            option.dataset.uom || '';
+
+        row.querySelector('input[name*="[estimated_unit_cost]"]').value =
+            option.dataset.cost || 0;
+
+        row.querySelector('input[name*="[description]"]').value =
+            option.dataset.description || '';
+
+        this.calculateRow(row);
+
+    }
+
+    addRow() {
+
+        this.tableBody.insertAdjacentHTML(
+            'beforeend',
+            this.buildRow(this.rowIndex)
+        );
+
+        this.rowIndex++;
+
+    }
+
+    buildRow(index) {
+
+        let options = `<option value="">Select Model</option>`;
+
+        window.equipmentModels.forEach(model => {
+
+            options += `
+                <option
+                    value="${model.id}"
+                    data-uom="${model.unit_of_measure}"
+                    data-cost="${model.standard_cost}"
+                    data-description="${model.specification ?? ''}">
+
+                    ${model.model_name}
+
+                </option>
+                `;
+        });
+
+        return `
 <tr>
 
 <td>
@@ -104,12 +171,11 @@ readonly>
 
 </td>
 
-<td>
+<td class="text-center">
 
 <button
 type="button"
-class="btn btn-danger btn-sm"
-onclick="removeRow(this)">
+class="btn btn-danger btn-sm btn-remove">
 
 <i class="bi bi-trash"></i>
 
@@ -120,12 +186,55 @@ onclick="removeRow(this)">
 </tr>
 `;
 
+    }
+
+    calculateRow(row) {
+
+        const qty = parseFloat(
+            row.querySelector('.quantity').value
+        ) || 0;
+
+        const unitCost = parseFloat(
+            row.querySelector('.unit-cost').value
+        ) || 0;
+
+        const total = qty * unitCost;
+
+        row.querySelector('.line-total').value =
+            total.toLocaleString('en-PH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+        this.calculateGrandTotal();
+
+    }
+
+    calculateGrandTotal() {
+
+        let total = 0;
+
+        document.querySelectorAll('.line-total').forEach(input => {
+
+            total += parseFloat(
+                input.value.replace(/,/g, '')
+            ) || 0;
+
+        });
+
+        this.grandTotal.innerHTML =
+            '₱' +
+            total.toLocaleString('en-PH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+    }
+
 }
 
-function removeRow(button){
+document.addEventListener('DOMContentLoaded', () => {
 
-    button.closest("tr").remove();
+    new TransactionTable();
 
-    calculateGrandTotal();
-
-}
+});

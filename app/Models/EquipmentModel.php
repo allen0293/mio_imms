@@ -25,6 +25,12 @@ class EquipmentModel extends Model
         'equipment_brand_id',
 
         'manufacturer_part_number',
+          
+        'unit_of_measure',
+
+        'standard_cost',
+
+        'specification',
 
         'description',
 
@@ -35,6 +41,9 @@ class EquipmentModel extends Model
         'updated_by',
 
     ];
+
+
+    
 
     protected static function booted()
     {

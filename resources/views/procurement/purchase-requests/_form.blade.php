@@ -121,6 +121,5 @@
     :equipmentModels="$equipmentModels"
 />
 
-
-
 <x-transaction.total-card />
+
