@@ -73,7 +73,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="#" class="nav-link text-white">
+              <a href="{{ route('procurement.purchase-requests.index') }}"
+            class="nav-link {{ request()->routeIs('procurement.purchase-requests.*') ? 'active' : '' }}">
                 <i class="bi bi-pc-display me-2"></i>
                 Purchase Requests
             </a>
@@ -93,7 +94,7 @@
             </a>
         </li>
 
-
+        
         <li class="nav-item mt-3">
             <small class="text-uppercase text-secondary">Inventory</small>
         </li>

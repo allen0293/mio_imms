@@ -222,4 +222,60 @@ class PurchaseRequestController extends Controller
                 'Purchase Request restored successfully.'
             );
     }
+
+
+    /**
+ * Submit Purchase Request
+ */
+public function submit(PurchaseRequest $purchaseRequest)
+{
+    return back()->with(
+        'success',
+        'Submit feature coming next.'
+    );
+}
+
+    /**
+     * Approve Purchase Request
+     */
+    public function approve(PurchaseRequest $purchaseRequest)
+    {
+        return back()->with(
+            'success',
+            'Approve feature coming next.'
+        );
+    }
+
+    /**
+     * Reject Purchase Request
+     */
+    public function reject(PurchaseRequest $purchaseRequest)
+    {
+        return back()->with(
+            'success',
+            'Reject feature coming next.'
+        );
+    }
+
+    /**
+     * Cancel Purchase Request
+     */
+    public function cancel(PurchaseRequest $purchaseRequest)
+    {
+        return back()->with(
+            'success',
+            'Cancel feature coming next.'
+        );
+    }
+
+    /**
+     * Print Purchase Request
+     */
+    public function print(PurchaseRequest $purchaseRequest)
+    {
+        return view(
+            'procurement.purchase-requests.print',
+            compact('purchaseRequest')
+        );
+    }
 }
