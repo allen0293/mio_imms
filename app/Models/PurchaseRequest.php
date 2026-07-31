@@ -27,6 +27,7 @@ class PurchaseRequest extends Model
         'status',
         'created_by',
         'updated_by',
+        'current_approval_level',
     ];
 
     protected $casts = [
@@ -107,4 +108,38 @@ class PurchaseRequest extends Model
         {
             return $this->status === 'Draft';
         }
+
+
+        public function canSubmit(): bool
+{
+    return $this->status === 'Draft';
+}
+
+public function canApprove(): bool
+{
+    return $this->status === 'Submitted';
+}
+
+public function canReject(): bool
+{
+    return $this->status === 'Submitted';
+}
+
+public function canReturn(): bool
+{
+    return $this->status === 'Submitted';
+}
+
+public function canCancel(): bool
+{
+    return in_array($this->status, [
+        'Draft',
+        'Submitted',
+    ]);
+}
+
+public function isApproved(): bool
+{
+    return $this->status === 'Approved';
+}
 }

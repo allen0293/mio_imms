@@ -246,5 +246,48 @@ class PurchaseRequestService
 
         return $purchaseRequest;
     }
+
+
+   public function submit(PurchaseRequest $purchaseRequest)
+        {
+            if ($purchaseRequest->status !== 'Draft') {
+                throw ValidationException::withMessages([
+                    'status' => 'Only Draft purchase requests can be submitted.',
+                ]);
+            }
+
+            if ($purchaseRequest->items()->count() === 0) {
+                throw ValidationException::withMessages([
+                    'items' => 'Please add at least one item before submitting.',
+                ]);
+            }
+
+            DB::transaction(function () use ($purchaseRequest) {
+
+                $purchaseRequest->update([
+                    'status' => 'Submitted',
+                    'current_approval_level' => 1,
+                ]);
+
+                PurchaseRequestApproval::create([
+                    'purchase_request_id' => $purchaseRequest->id,
+                    'approval_level'      => 1,
+                    'approver_id'         => $this->getDepartmentHead($purchaseRequest),
+                    'status'              => 'Pending',
+                ]);
+
+                PurchaseRequestHistory::create([
+                    'purchase_request_id' => $purchaseRequest->id,
+                    'action'              => 'Submitted',
+                    'description'         => 'Purchase Request submitted for approval.',
+                    'performed_by'        => auth()->id(),
+                ]);
+
+            });
+        }
+    private function getDepartmentHead(PurchaseRequest $purchaseRequest)
+    {
+        return 1;
+    }
     
 }

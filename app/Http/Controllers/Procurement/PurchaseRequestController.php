@@ -11,13 +11,18 @@ use App\Models\Employee;
 use App\Models\EquipmentModel;
 use App\Services\PurchaseRequestService;
 use Illuminate\Http\Request;
-
+use App\Services\PurchaseRequestApprovalService;
 class PurchaseRequestController extends Controller
 {
     public function __construct(
-        protected PurchaseRequestService $purchaseRequestService
-    ) {}
+        PurchaseRequestService $purchaseRequestService,
+        PurchaseRequestApprovalService $approvalService
+        )
+        {
+            $this->purchaseRequestService = $purchaseRequestService;
 
+            $this->approvalService = $approvalService;
+        }
     /**
      * Display Purchase Requests
      */
@@ -227,24 +232,40 @@ class PurchaseRequestController extends Controller
     /**
  * Submit Purchase Request
  */
-public function submit(PurchaseRequest $purchaseRequest)
-{
-    return back()->with(
-        'success',
-        'Submit feature coming next.'
-    );
-}
+    public function submit(PurchaseRequest $purchaseRequest)
+    {
+        $this->purchaseRequestService->submit($purchaseRequest);
+
+        return redirect()
+            ->route(
+                'procurement.purchase-requests.show',
+                $purchaseRequest
+            )
+            ->with(
+                'success',
+                'Purchase Request submitted successfully.'
+            );
+    }
 
     /**
      * Approve Purchase Request
      */
-    public function approve(PurchaseRequest $purchaseRequest)
-    {
-        return back()->with(
-            'success',
-            'Approve feature coming next.'
-        );
-    }
+        public function approve(PurchaseRequest $purchaseRequest)
+        {
+            $this->approvalService->approve($purchaseRequest);
+
+            return redirect()
+
+                ->route(
+                    'procurement.purchase-requests.show',
+                    $purchaseRequest
+                )
+
+                ->with(
+                    'success',
+                    'Purchase Request approved successfully.'
+                );
+        }
 
     /**
      * Reject Purchase Request
@@ -278,4 +299,37 @@ public function submit(PurchaseRequest $purchaseRequest)
             compact('purchaseRequest')
         );
     }
+
+    /*
+        Return Purchase Request
+    */
+    public function returnForRevision(Request $request, PurchaseRequest $purchaseRequest)
+{
+    $request->validate([
+
+        'remarks' => 'required|string|max:1000',
+
+    ]);
+
+    $this->approvalService->returnForRevision(
+
+        $purchaseRequest,
+
+        $request->remarks
+
+    );
+
+    return redirect()
+
+        ->route(
+            'procurement.purchase-requests.show',
+            $purchaseRequest
+        )
+
+        ->with(
+            'success',
+            'Purchase Request returned successfully.'
+        );
+}
+
 }
