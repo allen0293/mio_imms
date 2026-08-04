@@ -1,45 +1,96 @@
 <x-card title="Actions">
 
-    @if($purchaseRequest->canSubmit())
+  @can('print', $purchaseRequest)
 
-        <form
-            method="POST"
-            action="{{ route('procurement.purchase-requests.submit', $purchaseRequest) }}">
+    <a
+        href="{{ route('procurement.purchase-requests.print', $purchaseRequest) }}"
+        target="_blank"
+        class="btn btn-secondary w-100 mb-2">
 
-            @csrf
+        <i class="bi bi-printer"></i>
 
-            <button
-                class="btn btn-success w-100 mb-2">
+        Print
 
-                <i class="bi bi-send"></i>
+    </a>
 
-                Submit
+    @endcan
 
-            </button>
+    @can('submit', $purchaseRequest)
 
-        </form>
+    <form
+        action="{{ route('procurement.purchase-requests.submit', $purchaseRequest) }}"
+        method="POST">
 
-    @endif
+        @csrf
 
-    @if($purchaseRequest->canApprove())
+        <button
+            type="submit"
+            class="btn btn-success w-100 mb-2">
 
-        <form
-            method="POST"
-            action="{{ route('procurement.purchase-requests.approve', $purchaseRequest) }}">
+            <i class="bi bi-send"></i>
 
-            @csrf
+            Submit
 
-            <button
-                class="btn btn-primary w-100">
+        </button>
 
-                <i class="bi bi-check-circle"></i>
+    </form>
 
-                Approve
+    @endcan
 
-            </button>
+    @can('approve', $purchaseRequest)
 
-        </form>
+    <form
+        action="{{ route('procurement.purchase-requests.approve', $purchaseRequest) }}"
+        method="POST">
 
-    @endif
+        @csrf
 
+        <button
+            type="submit"
+            class="btn btn-primary w-100 mb-2">
+
+            <i class="bi bi-check-circle"></i>
+
+            Approve
+
+        </button>
+
+    </form>
+
+    @endcan
+
+    @can('update', $purchaseRequest)
+
+    <a
+        href="{{ route('procurement.purchase-requests.edit', $purchaseRequest) }}"
+        class="btn btn-warning w-100 mb-2">
+
+        <i class="bi bi-pencil"></i>
+
+        Edit
+
+    </a>
+
+    @endcan
+
+
+    @can('delete', $purchaseRequest)
+
+<form
+    action="{{ route('procurement.purchase-requests.destroy', $purchaseRequest) }}"
+    method="POST">
+
+    @csrf
+    @method('DELETE')
+
+    <button
+        class="btn btn-danger w-100">
+
+        Delete
+
+    </button>
+
+</form>
+
+@endcan
 </x-card>

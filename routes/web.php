@@ -10,6 +10,7 @@ use App\Http\Controllers\MasterData\EquipmentBrandController;
 use App\Http\Controllers\MasterData\EquipmentModelController;
 use App\Http\Controllers\MasterData\SupplierController;
 use App\Http\Controllers\Procurement\PurchaseRequestController;
+use App\Http\Controllers\Procurement\PurchaseRequestAttachmentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -144,3 +145,92 @@ Route::prefix('procurement')
          ->name('purchase-requests.restore');
 
     });
+
+    /*
+    purchase request 
+    */
+    Route::middleware(['auth'])
+    ->prefix('procurement')
+    ->name('procurement.')
+    ->group(function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Purchase Requests
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get(
+            'purchase-requests/trash',
+            [PurchaseRequestController::class, 'trash']
+        )->name('purchase-requests.trash');
+
+        Route::put(
+            'purchase-requests/{id}/restore',
+            [PurchaseRequestController::class, 'restore']
+        )->name('purchase-requests.restore');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Workflow
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post(
+            'purchase-requests/{purchaseRequest}/submit',
+            [PurchaseRequestController::class, 'submit']
+        )->name('purchase-requests.submit');
+
+        Route::post(
+            'purchase-requests/{purchaseRequest}/approve',
+            [PurchaseRequestController::class, 'approve']
+        )->name('purchase-requests.approve');
+
+        Route::post(
+            'purchase-requests/{purchaseRequest}/reject',
+            [PurchaseRequestController::class, 'reject']
+        )->name('purchase-requests.reject');
+
+        Route::post(
+            'purchase-requests/{purchaseRequest}/cancel',
+            [PurchaseRequestController::class, 'cancel']
+        )->name('purchase-requests.cancel');
+
+        Route::get(
+            'purchase-requests/{purchaseRequest}/print',
+            [PurchaseRequestController::class, 'print']
+        )->name('purchase-requests.print');
+
+        /*
+        |--------------------------------------------------------------------------
+        | CRUD
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource(
+            'purchase-requests',
+            PurchaseRequestController::class
+        );
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Purchase Request Attachments
+    |--------------------------------------------------------------------------
+    */
+    Route::post(
+        'purchase-requests/{purchaseRequest}/attachments',
+        [PurchaseRequestAttachmentController::class, 'store']
+    )->name('procurement.purchase-requests.attachments.store');
+
+    Route::delete(
+        'purchase-request-attachments/{attachment}',
+        [PurchaseRequestAttachmentController::class, 'destroy']
+    )->name('procurement.purchase-requests.attachments.destroy');       
+
+
+    Route::get(
+    'purchase-requests/{purchaseRequest}/print',
+    [PurchaseRequestController::class, 'print']
+)->name('procurement.purchase-requests.print');

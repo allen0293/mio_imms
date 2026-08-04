@@ -28,6 +28,7 @@ class PurchaseRequestController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', PurchaseRequest::class);
         $search = $request->search;
 
         $purchaseRequests = PurchaseRequest::with([
@@ -60,6 +61,7 @@ class PurchaseRequestController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', PurchaseRequest::class);
         $departments = Department::orderBy('department_name')->get();
 
         $employees = Employee::where('is_active', true)
@@ -88,6 +90,7 @@ class PurchaseRequestController extends Controller
      */
     public function store(StorePurchaseRequestRequest $request)
     {
+           $this->authorize('create', PurchaseRequest::class);
         $purchaseRequest = $this->purchaseRequestService
             ->create($request->validated());
 
@@ -106,28 +109,41 @@ class PurchaseRequestController extends Controller
      * Show Purchase Request
      */
     public function show(PurchaseRequest $purchaseRequest)
-    {
-        $purchaseRequest->load([
-            'department',
-            'requester',
-            'items.equipmentModel.brand',
-            'items.equipmentModel.category',
-            'approvals.approver',
-            'histories.performer',
-            'attachments.uploader'
-        ]);
+        {
+             $this->authorize('view', $purchaseRequest);
+            $purchaseRequest->load([
 
-        return view(
-            'procurement.purchase-requests.show',
-            compact('purchaseRequest')
-        );
-    }
+                'department',
+
+                'requester',
+
+                'items.equipmentModel.category',
+
+                'items.equipmentModel.brand',
+
+                'histories.performer',
+
+                'attachments',
+
+                'approvals',
+
+            ]);
+
+            return view(
+
+                'procurement.purchase-requests.show',
+
+                compact('purchaseRequest')
+
+            );
+        }
 
     /**
      * Edit Purchase Request
      */
     public function edit(PurchaseRequest $purchaseRequest)
     {
+           $this->authorize('update', $purchaseRequest);
         if (! $purchaseRequest->isEditable()) {
 
             return back()->with(
@@ -165,6 +181,8 @@ class PurchaseRequestController extends Controller
         UpdatePurchaseRequestRequest $request,
         PurchaseRequest $purchaseRequest
     ) {
+        
+        $this->authorize('update', $purchaseRequest);
         $this->purchaseRequestService->update(
             $purchaseRequest,
             $request->validated()
@@ -186,6 +204,7 @@ class PurchaseRequestController extends Controller
      */
     public function destroy(PurchaseRequest $purchaseRequest)
     {
+        $this->authorize('delete', $purchaseRequest);
         $purchaseRequest->delete();
 
         return redirect()
@@ -234,6 +253,7 @@ class PurchaseRequestController extends Controller
  */
     public function submit(PurchaseRequest $purchaseRequest)
     {
+         $this->authorize('submit', $purchaseRequest);
         $this->purchaseRequestService->submit($purchaseRequest);
 
         return redirect()
@@ -252,6 +272,7 @@ class PurchaseRequestController extends Controller
      */
         public function approve(PurchaseRequest $purchaseRequest)
         {
+            $this->authorize('approve', $purchaseRequest);
             $this->approvalService->approve($purchaseRequest);
 
             return redirect()
@@ -293,12 +314,25 @@ class PurchaseRequestController extends Controller
      * Print Purchase Request
      */
     public function print(PurchaseRequest $purchaseRequest)
-    {
-        return view(
-            'procurement.purchase-requests.print',
-            compact('purchaseRequest')
-        );
-    }
+        {
+              $this->authorize('print', $purchaseRequest);
+            $purchaseRequest->load([
+
+                'department',
+
+                'requester',
+
+                'items.equipmentModel.category',
+
+                'items.equipmentModel.brand',
+
+            ]);
+
+            return view(
+                'procurement.purchase-requests.print',
+                compact('purchaseRequest')
+            );
+        }
 
     /*
         Return Purchase Request
@@ -331,5 +365,9 @@ class PurchaseRequestController extends Controller
             'Purchase Request returned successfully.'
         );
 }
+
+
+
+
 
 }

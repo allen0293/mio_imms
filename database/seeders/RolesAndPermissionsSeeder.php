@@ -22,32 +22,86 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $permissions = [
 
+            /*
+            |--------------------------------------------------------------------------
+            | Dashboard
+            |--------------------------------------------------------------------------
+            */
+
             'dashboard.view',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Employees
+            |--------------------------------------------------------------------------
+            */
 
             'employees.view',
             'employees.create',
             'employees.edit',
             'employees.delete',
 
+            /*
+            |--------------------------------------------------------------------------
+            | Inventory
+            |--------------------------------------------------------------------------
+            */
+
             'inventory.view',
             'inventory.create',
             'inventory.edit',
             'inventory.delete',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Maintenance
+            |--------------------------------------------------------------------------
+            */
 
             'maintenance.view',
             'maintenance.create',
             'maintenance.edit',
             'maintenance.approve',
 
-            'purchase.view',
-            'purchase.create',
-            'purchase.approve',
+            /*
+            |--------------------------------------------------------------------------
+            | Purchase Requests
+            |--------------------------------------------------------------------------
+            */
+
+            'purchase-request.view',
+            'purchase-request.create',
+            'purchase-request.edit',
+            'purchase-request.delete',
+            'purchase-request.submit',
+            'purchase-request.approve',
+            'purchase-request.reject',
+            'purchase-request.return',
+            'purchase-request.print',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Reports
+            |--------------------------------------------------------------------------
+            */
 
             'reports.view',
 
+            /*
+            |--------------------------------------------------------------------------
+            | Users
+            |--------------------------------------------------------------------------
+            */
+
             'users.manage',
 
-            'settings.manage'
+            /*
+            |--------------------------------------------------------------------------
+            | Settings
+            |--------------------------------------------------------------------------
+            */
+
+            'settings.manage',
 
         ];
 
@@ -91,30 +145,61 @@ class RolesAndPermissionsSeeder extends Seeder
         |--------------------------------------------------------------------------
         */
 
-        $administrator->givePermissionTo(Permission::all());
+        /*
+|--------------------------------------------------------------------------
+| Assign Permissions
+|--------------------------------------------------------------------------
+*/
 
-        $mioHead->givePermissionTo([
+$administrator->syncPermissions(Permission::all());
+
+        $mioHead->syncPermissions([
+
             'dashboard.view',
+
             'reports.view',
-            'purchase.approve',
-            'maintenance.approve'
+
+            'purchase-request.view',
+            'purchase-request.approve',
+            'purchase-request.reject',
+            'purchase-request.return',
+            'purchase-request.print',
+
+            'maintenance.approve',
+
         ]);
 
-        $inventory->givePermissionTo([
+        $inventory->syncPermissions([
+
             'inventory.view',
             'inventory.create',
             'inventory.edit',
-            'employees.view'
+
+            'employees.view',
+
+            'purchase-request.view',
+            'purchase-request.print',
+
         ]);
 
-        $technician->givePermissionTo([
+        $technician->syncPermissions([
+
             'maintenance.view',
             'maintenance.create',
-            'maintenance.edit'
+            'maintenance.edit',
+
         ]);
 
-        $employee->givePermissionTo([
-            'dashboard.view'
+        $employee->syncPermissions([
+
+            'dashboard.view',
+
+            'purchase-request.view',
+            'purchase-request.create',
+            'purchase-request.edit',
+            'purchase-request.submit',
+            'purchase-request.print',
+
         ]);
     }
 }
