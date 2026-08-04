@@ -109,6 +109,11 @@ class PurchaseRequest extends Model
             return $this->status === 'Draft';
         }
 
+    public function canEdit(): bool
+    {
+        return $this->isEditable();
+    }
+
 
         public function canSubmit(): bool
 {

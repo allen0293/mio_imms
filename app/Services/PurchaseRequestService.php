@@ -9,15 +9,21 @@ use App\Models\PurchaseRequestHistory;
 use App\Models\PurchaseRequestItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class PurchaseRequestService
 {
-    /**
-     * Create Purchase Request
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Create Purchase Request
+    |--------------------------------------------------------------------------
+    */
+
     public function create(array $data): PurchaseRequest
     {
         return DB::transaction(function () use ($data) {
+
+            $action = request()->input('action', 'draft');
 
             /*
             |--------------------------------------------------------------------------
@@ -25,7 +31,7 @@ class PurchaseRequestService
             |--------------------------------------------------------------------------
             */
 
-            $purchaseRequest = $this->createHeader($data);
+            $purchaseRequest = $this->createHeader($data, $action);
 
             /*
             |--------------------------------------------------------------------------
@@ -40,7 +46,7 @@ class PurchaseRequestService
 
             /*
             |--------------------------------------------------------------------------
-            | Update Total Amount
+            | Update Estimated Amount
             |--------------------------------------------------------------------------
             */
 
@@ -65,34 +71,108 @@ class PurchaseRequestService
 
             /*
             |--------------------------------------------------------------------------
-            | Create History
+            | Submit Workflow
             |--------------------------------------------------------------------------
             */
 
-            $this->createHistory(
-                $purchaseRequest,
-                'Created',
-                'Purchase Request created.'
-            );
+            if ($action === 'submit') {
 
-            /*
-            |--------------------------------------------------------------------------
-            | Create Initial Approval
-            |--------------------------------------------------------------------------
-            */
+                $purchaseRequest->update([
+                    'current_approval_level' => 1,
+                ]);
 
-            $this->createApproval($purchaseRequest);
+                $this->createApproval($purchaseRequest);
+
+                $this->createHistory(
+                    $purchaseRequest,
+                    'Submitted',
+                    'Purchase Request submitted for approval.'
+                );
+
+            } else {
+
+                $this->createHistory(
+                    $purchaseRequest,
+                    'Created',
+                    'Purchase Request saved as draft.'
+                );
+
+            }
 
             return $purchaseRequest;
 
         });
     }
 
-    /**
-     * Create Purchase Request Header
-     */
-    private function createHeader(array $data): PurchaseRequest
+    /*
+    |--------------------------------------------------------------------------
+    | Update Purchase Request
+    |--------------------------------------------------------------------------
+    */
+
+    public function update(
+        PurchaseRequest $purchaseRequest,
+        array $data
+    ): PurchaseRequest {
+
+        // Will be implemented after Edit Screen
+
+        return $purchaseRequest;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Submit Existing Draft
+    |--------------------------------------------------------------------------
+    */
+
+    public function submit(PurchaseRequest $purchaseRequest): void
     {
+        if ($purchaseRequest->status !== 'Draft') {
+
+            throw ValidationException::withMessages([
+                'status' => 'Only Draft Purchase Requests can be submitted.',
+            ]);
+
+        }
+
+        if ($purchaseRequest->items()->count() === 0) {
+
+            throw ValidationException::withMessages([
+                'items' => 'Please add at least one item.',
+            ]);
+
+        }
+
+        DB::transaction(function () use ($purchaseRequest) {
+
+            $purchaseRequest->update([
+                'status' => 'Submitted',
+                'current_approval_level' => 1,
+            ]);
+
+            $this->createApproval($purchaseRequest);
+
+            $this->createHistory(
+                $purchaseRequest,
+                'Submitted',
+                'Purchase Request submitted for approval.'
+            );
+
+        });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Create Header
+    |--------------------------------------------------------------------------
+    */
+
+    private function createHeader(
+        array $data,
+        string $action
+    ): PurchaseRequest {
+
         return PurchaseRequest::create([
 
             'pr_number' => DocumentNumberService::generate('PR'),
@@ -113,16 +193,26 @@ class PurchaseRequestService
 
             'remarks' => $data['remarks'] ?? null,
 
-            'status' => 'Draft',
+            'status' => $action === 'submit'
+                ? 'Submitted'
+                : 'Draft',
 
             'estimated_amount' => 0,
 
+            'current_approval_level' => $action === 'submit'
+                ? 1
+                : 0,
+
         ]);
+
     }
 
-    /**
-     * Save Purchase Request Items
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Save Items
+    |--------------------------------------------------------------------------
+    */
+
     private function saveItems(
         PurchaseRequest $purchaseRequest,
         array $items
@@ -159,14 +249,18 @@ class PurchaseRequestService
             ]);
 
             $grandTotal += $lineTotal;
+
         }
 
         return $grandTotal;
     }
 
-    /**
-     * Save Attachments
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Save Attachments
+    |--------------------------------------------------------------------------
+    */
+
     private function saveAttachments(
         PurchaseRequest $purchaseRequest,
         array $attachments
@@ -192,9 +286,36 @@ class PurchaseRequestService
 
     }
 
-    /**
-     * Create History
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Create Approval
+    |--------------------------------------------------------------------------
+    */
+
+    private function createApproval(
+        PurchaseRequest $purchaseRequest
+    ): void {
+
+        PurchaseRequestApproval::create([
+
+            'purchase_request_id' => $purchaseRequest->id,
+
+            'approval_level' => 1,
+
+            'approver_id' => $this->getDepartmentHead($purchaseRequest),
+
+            'status' => 'Pending',
+
+        ]);
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Create History
+    |--------------------------------------------------------------------------
+    */
+
     private function createHistory(
         PurchaseRequest $purchaseRequest,
         string $action,
@@ -215,79 +336,26 @@ class PurchaseRequestService
 
     }
 
-    /**
-     * Create Initial Approval
-     */
-    private function createApproval(
+    /*
+    |--------------------------------------------------------------------------
+    | Temporary Approver
+    |--------------------------------------------------------------------------
+    */
+
+    private function getDepartmentHead(
         PurchaseRequest $purchaseRequest
-    ): void {
+    ): ?int {
 
-        PurchaseRequestApproval::create([
+        /*
+        |--------------------------------------------------------------------------
+        | Temporary Implementation
+        |--------------------------------------------------------------------------
+        |
+        | This will be replaced by the Approval Matrix module.
+        |
+        */
 
-            'purchase_request_id' => $purchaseRequest->id,
-
-            'approval_level' => 1,
-
-            'approver_id' => null,
-
-            'status' => 'Pending',
-
-        ]);
-
-    }
-    
-    public function update(
-        PurchaseRequest $purchaseRequest,
-        array $data
-    ): PurchaseRequest {
-
-        // We'll implement the full update logic
-        // after building the Edit screen.
-
-        return $purchaseRequest;
-    }
-
-
-   public function submit(PurchaseRequest $purchaseRequest)
-        {
-            if ($purchaseRequest->status !== 'Draft') {
-                throw ValidationException::withMessages([
-                    'status' => 'Only Draft purchase requests can be submitted.',
-                ]);
-            }
-
-            if ($purchaseRequest->items()->count() === 0) {
-                throw ValidationException::withMessages([
-                    'items' => 'Please add at least one item before submitting.',
-                ]);
-            }
-
-            DB::transaction(function () use ($purchaseRequest) {
-
-                $purchaseRequest->update([
-                    'status' => 'Submitted',
-                    'current_approval_level' => 1,
-                ]);
-
-                PurchaseRequestApproval::create([
-                    'purchase_request_id' => $purchaseRequest->id,
-                    'approval_level'      => 1,
-                    'approver_id'         => $this->getDepartmentHead($purchaseRequest),
-                    'status'              => 'Pending',
-                ]);
-
-                PurchaseRequestHistory::create([
-                    'purchase_request_id' => $purchaseRequest->id,
-                    'action'              => 'Submitted',
-                    'description'         => 'Purchase Request submitted for approval.',
-                    'performed_by'        => auth()->id(),
-                ]);
-
-            });
-        }
-    private function getDepartmentHead(PurchaseRequest $purchaseRequest)
-    {
         return 1;
+
     }
-    
 }

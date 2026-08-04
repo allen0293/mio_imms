@@ -123,3 +123,41 @@
 
 <x-transaction.total-card />
 
+<div class="d-flex justify-content-end gap-2 mt-4 mb-3">
+
+    <a
+        href="{{ route('procurement.purchase-requests.index') }}"
+        class="btn btn-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Cancel
+
+    </a>
+
+    <button
+        type="submit"
+        name="action"
+        value="draft"
+        class="btn btn-warning">
+
+        <i class="bi bi-save"></i>
+
+        Save as Draft
+
+    </button>
+
+    <button
+        type="submit"
+        name="action"
+        value="submit"
+        class="btn btn-primary">
+
+        <i class="bi bi-send"></i>
+
+        Submit Purchase Request
+
+    </button>
+
+</div>
+
