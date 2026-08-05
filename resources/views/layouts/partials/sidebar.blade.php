@@ -38,6 +38,20 @@
             </a>
         </li>
 
+        <li class="nav-item">
+
+            <a
+                href="{{ route('item-categories.index') }}"
+                class="nav-link {{ request()->routeIs('item-categories.*') ? 'active' : '' }}">
+
+                <i class="bi bi-tags"></i>
+
+                <span>Item Categories</span>
+
+            </a>
+
+        </li>
+
          <li class="nav-item">
             <a href="{{ route('master-data.equipment-brands.index') }}"
                class="nav-link text-white {{ request()->routeIs('master-data.equipment-brands.*') ? 'active' : '' }}">

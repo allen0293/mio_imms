@@ -11,7 +11,7 @@ use App\Http\Controllers\MasterData\EquipmentModelController;
 use App\Http\Controllers\MasterData\SupplierController;
 use App\Http\Controllers\Procurement\PurchaseRequestController;
 use App\Http\Controllers\Procurement\PurchaseRequestAttachmentController;
-
+use App\Http\Controllers\ItemCategoryController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -234,3 +234,8 @@ Route::prefix('procurement')
     'purchase-requests/{purchaseRequest}/print',
     [PurchaseRequestController::class, 'print']
 )->name('procurement.purchase-requests.print');
+
+Route::resource(
+    'item-categories',
+    ItemCategoryController::class
+);

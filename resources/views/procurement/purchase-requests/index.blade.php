@@ -201,13 +201,25 @@
 
                                 </a>
 
-                                <a
-                                    href="{{ route('procurement.purchase-requests.edit',$purchaseRequest) }}"
-                                    class="btn btn-outline-warning">
+                              @if($purchaseRequest->isEditable())
 
-                                    <i class="bi bi-pencil"></i>
-
+                                <a href="{{ route('procurement.purchase-requests.edit', $purchaseRequest) }}"
+                                class="btn btn-warning">
+                                    Edit
                                 </a>
+
+                                @else
+
+                                <button
+                                    class="btn btn-warning"
+                                    disabled
+                                    title="Only Draft Purchase Requests can be edited">
+
+                                    Edit
+
+                                </button>
+
+                                @endif
 
                                 <form
                                     action="{{ route('procurement.purchase-requests.destroy',$purchaseRequest) }}"
